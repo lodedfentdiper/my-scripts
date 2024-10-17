@@ -1,0 +1,30 @@
+-- used for strucid, MIGHT work in other games.
+BRHitboxes.Name = "BRHitboxes"
+BRHitboxes.Parent = Main
+BRHitboxes.BackgroundColor3 = Color3.new(0.494118, 0.494118, 0.494118)
+BRHitboxes.Position = UDim2.new(0.418013901, 0, 0.393955529, 0)
+BRHitboxes.Size = UDim2.new(0, 72, 0, 24)
+BRHitboxes.Font = Enum.Font.SourceSans
+BRHitboxes.Text = "BR Hitboxes"
+BRHitboxes.TextColor3 = Color3.new(0, 0, 0)
+BRHitboxes.TextSize = 14
+BRHitboxes.MouseButton1Click:connect(function()
+_G.HeadSize = 50
+_G.Disabled = true
+end)
+
+game:GetService('RunService').RenderStepped:connect(function()
+if _G.Disabled then
+for i,v in next, game:GetService('Players'):GetPlayers() do
+if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+pcall(function()
+v.Character.HumanoidRootPart.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+v.Character.HumanoidRootPart.Transparency = 0.7
+v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really blue")
+v.Character.HumanoidRootPart.Material = "Neon"
+v.Character.HumanoidRootPart.CanCollide = false
+end)
+end
+end
+end
+end)
