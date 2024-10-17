@@ -1,0 +1,43 @@
+-- universal, will break if used in a game like strucid where there are custom characters
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Camera = game:GetService("Workspace").CurrentCamera
+local function createESP(character)
+    local outline = Instance.new("Highlight")
+    outline.Parent = character
+    outline.FillColor = Color3.new(1, 0, 0) -- Red color
+    outline.OutlineColor = Color3.new(1, 0, 0) -- Red outline
+    outline.OutlineTransparency = 0 -- No transparency
+    outline.Enabled = true
+end
+
+local function removeESP(character)
+    local highlight = character:FindFirstChildOfClass("Highlight")
+    if highlight then
+        highlight:Destroy()
+    end
+end
+
+local function updateESP(player)
+    if player ~= LocalPlayer then
+        local character = player.Character or player.CharacterAdded:Wait()
+        createESP(character)
+
+        player.CharacterRemoving:Connect(function()
+            removeESP(character)
+        end)
+
+
+        player.CharacterAdded:Connect(function(newCharacter)
+            removeESP(character)
+            createESP(newCharacter)
+        end)
+    end
+end
+
+
+Players.PlayerAdded:Connect(updateESP)
+
+for _, player in pairs(Players:GetPlayers()) do
+    updateESP(player)
+end
